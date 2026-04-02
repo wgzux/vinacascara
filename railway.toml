@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "php -S 0.0.0.0:$PORT -t /app"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[environments.production]
+[environments.production.variables]
+PHP_EXTENSIONS = "pdo pdo_mysql"

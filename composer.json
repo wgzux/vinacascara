@@ -1,0 +1,12 @@
+{
+  "name": "vinacascara/ecommerce",
+  "description": "Vina Cascara E-Commerce Website",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "google/apiclient": "^2.19"
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
