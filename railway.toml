@@ -2,6 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
+preDeployCommand = "php database/migrate.php"
 startCommand = "php -S 0.0.0.0:$PORT -t public"
 healthcheckPath = "/"
 healthcheckTimeout = 100

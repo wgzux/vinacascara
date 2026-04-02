@@ -14,8 +14,8 @@ define('DB_USER', $_ENV['MYSQLUSER'] ?? $_ENV['DB_USER'] ?? 'root');
 define('DB_PASS', $_ENV['MYSQLPASSWORD'] ?? $_ENV['DB_PASS'] ?? '');
 
 // Site Configuration
-$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
+$host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? 'localhost';
 define('SITE_URL', $_ENV['SITE_URL'] ?? "{$protocol}://{$host}");
 define('SITE_NAME', 'Vina Cascara');
 define('SITE_TAGLINE', 'Trà từ vỏ cà phê Arabica Việt Nam');
