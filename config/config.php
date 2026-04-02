@@ -4,7 +4,7 @@
 // ========================================
 
 // Detect environment
-$isRailway = isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_SERVER['RAILWAY_ENVIRONMENT']);
+$isRailway = isset($_ENV['MYSQLHOST']) || isset($_SERVER['MYSQLHOST']) || isset($_ENV['RAILWAY_ENVIRONMENT']);
 
 // Database Configuration
 define('DB_HOST', $_ENV['MYSQLHOST'] ?? $_ENV['DB_HOST'] ?? 'localhost');

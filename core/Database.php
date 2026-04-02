@@ -8,17 +8,28 @@ class Database {
     public static function getInstance(): PDO {
         if (self::$instance === null) {
             try {
-                // 1. Connect without Database to create it if not exists
-                $dsn_no_db = sprintf('mysql:host=%s;port=%s;charset=utf8mb4', DB_HOST, DB_PORT);
-                $pdo = new PDO($dsn_no_db, DB_USER, DB_PASS, [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
-                ]);
+                $isRailway = isset($_ENV['MYSQLHOST']) || isset($_SERVER['MYSQLHOST']);
+                
+                if ($isRailway) {
+                    // 1. Connect directly to the database on Railway
+                    $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', DB_HOST, DB_PORT, DB_NAME);
+                    $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+                    ]);
+                } else {
+                    // 1. Local: Connect without Database first to create it if not exists
+                    $dsn_no_db = sprintf('mysql:host=%s;port=%s;charset=utf8mb4', DB_HOST, DB_PORT);
+                    $pdo = new PDO($dsn_no_db, DB_USER, DB_PASS, [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+                    ]);
 
-                // 2. Create database
-                $dbName = "`" . str_replace("`", "``", DB_NAME) . "`";
-                $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-                $pdo->exec("USE $dbName");
+                    // 2. Local only: Create database
+                    $dbName = "`" . str_replace("`", "``", DB_NAME) . "`";
+                    $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+                    $pdo->exec("USE $dbName");
+                }
 
                 // 3. Set default settings
                 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
