@@ -3,16 +3,18 @@ FROM php:8.1-apache
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install system dependencies for gd extension
+# Install system dependencies for gd and zip extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    libzip-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo_mysql
+    && docker-php-ext-install gd pdo_mysql zip
 
 # Enable mod_rewrite for .htaccess
 RUN a2enmod rewrite
