@@ -33,10 +33,7 @@ Vào Railway MySQL → Connect → chạy nội dung `database/schema.sql`
 - Sandbox: Đăng ký tại [sandbox.vnpayment.vn](https://sandbox.vnpayment.vn/devreg/)
 - Production: Đăng ký merchant chính thức
 
-## 🔐 Tài khoản Admin mặc định
-- Email: `admin@vinacascara.com`
-- Password: `Admin@123`
-> **Đổi mật khẩu ngay sau khi deploy!**
+
 
 ## 📁 Cấu trúc thư mục
 ```
