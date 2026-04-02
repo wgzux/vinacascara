@@ -140,7 +140,6 @@
           <img src="/assets/images/about-tea.png" 
                alt="Về Vina Cascara" loading="lazy">
         </div>
-        </div>
       </div>
 
       <div class="about-content">
