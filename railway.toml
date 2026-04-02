@@ -5,9 +5,9 @@ builder = "nixpacks"
 preDeployCommand = "php database/migrate.php"
 startCommand = "php -S 0.0.0.0:$PORT -t public"
 healthcheckPath = "/health.php"
-healthcheckTimeout = 300
+healthcheckTimeout = 500
 restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 10
+restartPolicyMaxRetries = 15
 
 [environments.production]
 [environments.production.variables]

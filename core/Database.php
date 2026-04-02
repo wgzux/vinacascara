@@ -46,8 +46,8 @@ class Database {
                 if (defined('APP_DEBUG') && APP_DEBUG) {
                     die('Database connection failed: ' . $e->getMessage());
                 } else {
-                    $isRailway = isset($_ENV['MYSQLHOST']) || isset($_SERVER['MYSQLHOST']);
-                    if (!$isRailway && (isset($_ENV['RAILWAY_SERVICE_NAME']) || isset($_SERVER['RAILWAY_SERVICE_NAME']))) {
+                    $isRailway = isset($_ENV['MYSQLHOST']) || isset($_SERVER['MYSQLHOST']) || isset($_ENV['RAILWAY_SERVICE_NAME']);
+                    if (!$isRailway && (isset($_ENV['RAILWAY_STATIC_URL']) || isset($_SERVER['RAILWAY_STATIC_URL']) || isset($_ENV['RAILWAY_SERVICE_NAME']))) {
                         die('Lỗi: Chưa tìm thấy dịch vụ MySQL trong dự án Railway của bạn. Hãy nhấn nút "+ Create" -> Database -> MySQL ở góc phải màn hình Railway!');
                     }
                     die('Service temporarily unavailable (Database Auto-Init Failed).');
