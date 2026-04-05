@@ -8,39 +8,28 @@ class Database {
     public static function getInstance(): PDO {
         if (self::$instance === null) {
             try {
-                $isRailway = isset($_ENV['MYSQLHOST']) || isset($_SERVER['MYSQLHOST']);
-                
-                if ($isRailway) {
-                    // 1. Connect directly to the database on Railway
-                    $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', DB_HOST, DB_PORT, DB_NAME);
-                    $pdo = new PDO($dsn, DB_USER, DB_PASS, [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
-                    ]);
-                } else {
-                    // 1. Local: Connect without Database first to create it if not exists
-                    $dsn_no_db = sprintf('mysql:host=%s;port=%s;charset=utf8mb4', DB_HOST, DB_PORT);
-                    $pdo = new PDO($dsn_no_db, DB_USER, DB_PASS, [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
-                    ]);
+                // Connect directly to the database with enforced UTF-8 (InfinityFree compatible)
+                $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', DB_HOST, DB_PORT, DB_NAME);
+                $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
+                ]);
 
-                    // 2. Local only: Create database
-                    $dbName = "`" . str_replace("`", "``", DB_NAME) . "`";
-                    $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-                    $pdo->exec("USE $dbName");
-                }
-
-                // 3. Set default settings
-                $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                // Force timezone and charset after connection just to be absolutely safe
+                $pdo->exec("SET time_zone = '+07:00'");
+                $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
 
                 self::$instance = $pdo;
 
-                // 4. Run Code-First Migrator
-                require_once __DIR__ . '/Migrator.php';
-                $migrator = new Migrator(self::$instance);
-                $migrator->run();
+                // Run Code-First Migrator automatically ONLY if on Localhost
+                $isLocal = ($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === '::1');
+                if ($isLocal) {
+                    require_once __DIR__ . '/Migrator.php';
+                    $migrator = new Migrator(self::$instance);
+                    $migrator->run();
+                }
 
             } catch (PDOException $e) {
                 if (defined('APP_DEBUG') && APP_DEBUG) {

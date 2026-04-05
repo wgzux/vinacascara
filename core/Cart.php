@@ -87,7 +87,7 @@ class Cart {
              FROM cart c
              JOIN products p ON p.id = c.product_id AND p.status = 'active'
              WHERE {$w['where']}
-             ORDER BY c.added_at ASC",
+             ORDER BY c.created_at ASC",
             $w['params']
         );
     }

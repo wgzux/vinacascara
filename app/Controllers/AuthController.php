@@ -9,6 +9,26 @@ class AuthController {
         if (Auth::isLoggedIn()) {
             redirect('/');
         }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // Try admin login first
+            if (Auth::attemptAdmin($email, $password)) {
+                Auth::setFlash('success', 'Chào mừng Admin trở lại!');
+                redirect('/admin');
+            }
+            
+            // Then regular user login
+            if (Auth::attempt($email, $password)) {
+                Auth::setFlash('success', 'Đăng nhập thành công!');
+                redirect($_SESSION['redirect_after_login'] ?? '/');
+            }
+
+            Auth::setFlash('error', 'Email hoặc mật khẩu không chính xác.');
+        }
+
         return view('login', ['pageTitle' => 'Đăng Nhập']);
     }
 
@@ -22,14 +42,7 @@ class AuthController {
             redirect('/');
         }
         
-        $client = new \Google_Client();
-        $client->setClientId(GOOGLE_CLIENT_ID);
-        $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-        $client->setRedirectUri(SITE_URL . '/auth-callback');
-        $client->addScope('email');
-        $client->addScope('profile');
-        
-        $authUrl = $client->createAuthUrl();
+        $authUrl = \GoogleAuth::getAuthUrl();
         redirect($authUrl);
     }
 
@@ -39,32 +52,21 @@ class AuthController {
         }
 
         if (isset($_GET['code'])) {
-            $client = new \Google_Client();
-            $client->setClientId(GOOGLE_CLIENT_ID);
-            $client->setClientSecret(GOOGLE_CLIENT_SECRET);
-            $client->setRedirectUri(SITE_URL . '/auth-callback');
-
             try {
-                $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+                $userData = \GoogleAuth::handleCallback($_GET['code'], $_GET['state'] ?? '');
                 
-                if (!isset($token['error'])) {
-                    $client->setAccessToken($token['access_token']);
-                    $google_oauth = new \Google_Service_Oauth2($client);
-                    $google_account_info = $google_oauth->userinfo->get();
-                    
-                    $email = $google_account_info->email;
-                    $name = $google_account_info->name;
-                    $google_id = $google_account_info->id;
-                    $avatar = $google_account_info->picture;
+                if ($userData) {
+                    $email = $userData['email'];
+                    $name = $userData['name'];
+                    $google_id = $userData['sub'];
+                    $avatar = $userData['picture'] ?? null;
 
-                    // Check if user exists
-                    $user = Database::fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
+                    // Check if user exists by google_id or email
+                    $user = Database::fetchOne("SELECT * FROM users WHERE google_id = ? OR email = ? LIMIT 1", [$google_id, $email]);
                     
                     if ($user) {
-                        // Update avatar if changed
-                        if ($user['avatar'] !== $avatar) {
-                            Database::query("UPDATE users SET avatar = ? WHERE id = ?", [$avatar, $user['id']]);
-                        }
+                        // Update avatar and google_id if it was missing
+                        Database::query("UPDATE users SET avatar = ?, google_id = ? WHERE id = ?", [$avatar, $google_id, $user['id']]);
                         Auth::login($user);
                     } else {
                         // Register new user
@@ -84,8 +86,7 @@ class AuthController {
                     redirect($_SESSION['redirect_after_login'] ?? '/');
                 }
             } catch (\Exception $e) {
-                // Log error
-                Auth::setFlash('error', 'Đăng nhập Google thất bại. Vui lòng thử lại.');
+                Auth::setFlash('error', 'Đăng nhập Google thất bại: ' . $e->getMessage());
             }
         }
         

@@ -15,7 +15,7 @@ $currentUser = Auth::user();
   <meta property="og:title" content="<?= e($pageTitle) ?>">
   <meta property="og:description" content="<?= e($pageDescription) ?>">
   <meta property="og:image" content="https://vinacascara.lovable.app/assets/vina-cascara-1-CStrgfSG.png">
-  <link rel="icon" href="/assets/images/favicon.png" type="image/png">
+  <link rel="icon" href="/assets/images/favicon.png?v=<?= time() ?>" type="image/png">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

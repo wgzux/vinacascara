@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Nếu tệp hoặc thư mục thật sự tồn tại, phục vụ nó trực tiếp
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # Nếu không, chuyển vào index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Bảo mật: Cấm liệt kê thư mục
+Options -Indexes
