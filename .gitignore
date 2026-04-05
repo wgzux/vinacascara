@@ -1,23 +1,7 @@
-# PHP
-composer.phar
-/vendor/
-
-# Configuration
-/config/db_local.php
 .env
-
-# Temporary files
-/tmp/
+assets/uploads/*
+!assets/uploads/.gitkeep
+vendor/
 *.log
 .DS_Store
 Thumbs.db
-
-# VS Code / IDE
-.vscode/
-.idea/
-.project
-.settings/
-
-# OS generated files
-ehthumbs.db
-Icon?
