@@ -47,6 +47,6 @@ class HomeController {
                 \Auth::setFlash('error', 'Vui lòng điền đầy đủ thông tin.');
             }
         }
-        redirect('/#consultation');
+        redirect('/#contact');
     }
 }
