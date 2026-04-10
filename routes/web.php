@@ -33,8 +33,11 @@ $router->get('/admin/products', function() { require_once BASE_PATH . '/admin/pr
 $router->post('/admin/products', function() { require_once BASE_PATH . '/admin/products.php'; });
 $router->get('/admin/products/add', function() { require_once BASE_PATH . '/admin/product-add.php'; });
 $router->post('/admin/products/add', function() { require_once BASE_PATH . '/admin/product-add.php'; });
+$router->get('/admin/products/edit/{id}', function($id) { require_once BASE_PATH . '/admin/product-edit.php'; });
+$router->post('/admin/products/edit/{id}', function($id) { require_once BASE_PATH . '/admin/product-edit.php'; });
 $router->get('/admin/orders', function() { require_once BASE_PATH . '/admin/orders.php'; });
 $router->post('/admin/orders', function() { require_once BASE_PATH . '/admin/orders.php'; });
+$router->get('/admin/orders/{id}', function($id) { require_once BASE_PATH . '/admin/order-details.php'; });
 $router->get('/admin/customers', function() { require_once BASE_PATH . '/admin/customers.php'; });
 $router->get('/admin/reviews', function() { require_once BASE_PATH . '/admin/reviews.php'; });
 $router->post('/admin/reviews', function() { require_once BASE_PATH . '/admin/reviews.php'; });

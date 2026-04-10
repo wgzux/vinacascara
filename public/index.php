@@ -15,7 +15,11 @@ define('BASE_PATH', dirname(__DIR__));
 
 // Robust Autoloader for Shared Hosting (Combating Linux Case-Sensitivity)
 spl_autoload_register(function ($class) {
+    // Fix for Linux case-sensitivity: change 'App\' to 'app/'
     $classPath = str_replace('\\', '/', $class);
+    if (strpos($classPath, 'App/') === 0) {
+        $classPath = 'app' . substr($classPath, 3);
+    }
     
     $candidates = [
         BASE_PATH . '/' . $classPath . '.php', // Standard: App/Controllers/HomeController.php

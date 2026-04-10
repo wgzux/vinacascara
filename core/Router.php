@@ -22,6 +22,7 @@ class Router {
 
     public function dispatch($uri, $method) {
         $uri = parse_url($uri, PHP_URL_PATH);
+        if ($uri !== '/') $uri = rtrim($uri, '/');
         
         foreach ($this->routes as $route) {
             // Convert route vars like {id} to regex
