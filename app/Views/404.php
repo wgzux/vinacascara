@@ -1,6 +1,6 @@
 <?php
 $pageTitle = '404 – Không tìm thấy trang';
-require __DIR__ . '/../includes/header.php';
+require __DIR__ . '/includes/header.php';
 ?>
 <section class="error-section">
   <div class="container">
@@ -15,4 +15,4 @@ require __DIR__ . '/../includes/header.php';
     </div>
   </div>
 </section>
-<?php require __DIR__ . '/../includes/footer.php'; ?>
+<?php require __DIR__ . '/includes/footer.php'; ?>

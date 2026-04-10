@@ -47,7 +47,7 @@
         <h4 class="footer-heading">Sản Phẩm</h4>
         <ul class="footer-links">
           <li><a href="/product/tra-cascara-nguyen-chat">Trà Cascara Nguyên Chất</a></li>
-          <li><a href="/product/tra-cascara-tui-loc">Trà Cascara Túi Lọc</a></li>
+          <li><a href="/product/tra-cascara-dang-tui-loc">Trà Cascara Túi Lọc</a></li>
           <li><a href="/product/tra-cascara-say-rang">Trà Cascara Sấy & Rang</a></li>
         </ul>
       </div>
