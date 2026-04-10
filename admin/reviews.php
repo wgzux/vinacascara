@@ -4,9 +4,15 @@ require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../core/Auth.php';
 require_once __DIR__ . '/../core/Cart.php';
 
-function formatPrice(float $price): string { return number_format($price, 0, ',', '.') . '₫'; }
-function e(string $str): string { return htmlspecialchars($str, ENT_QUOTES, 'UTF-8'); }
-function redirect(string $url): void { header('Location: ' . $url); exit; }
+if (!function_exists('formatPrice')) {
+    function formatPrice(float $price): string { return number_format($price, 0, ',', '.') . '₫'; }
+}
+if (!function_exists('e')) {
+    function e(string $str): string { return htmlspecialchars($str, ENT_QUOTES, 'UTF-8'); }
+}
+if (!function_exists('redirect')) {
+    function redirect(string $url): void { header('Location: ' . $url); exit; }
+}
 
 Auth::requireAdmin();
 $adminPageTitle = 'Quản lý Đánh giá';
@@ -37,7 +43,7 @@ if ($statusFilter) {
     $reviews = array_filter($reviews, fn($r) => $r['status'] === $statusFilter);
 }
 
-require __DIR__ . '/../includes/admin_header.php';
+require __DIR__ . '/../app/Views/includes/admin_header.php';
 ?>
 
 <div class="admin-card">
@@ -108,4 +114,4 @@ require __DIR__ . '/../includes/admin_header.php';
   </div>
 </div>
 
-<?php require __DIR__ . '/../includes/admin_footer.php'; ?>
+<?php require __DIR__ . '/../app/Views/includes/admin_footer.php'; ?>
