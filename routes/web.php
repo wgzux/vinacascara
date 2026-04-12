@@ -41,4 +41,6 @@ $router->get('/admin/orders/{id}', function($id) { require_once BASE_PATH . '/ad
 $router->get('/admin/customers', function() { require_once BASE_PATH . '/admin/customers.php'; });
 $router->get('/admin/reviews', function() { require_once BASE_PATH . '/admin/reviews.php'; });
 $router->post('/admin/reviews', function() { require_once BASE_PATH . '/admin/reviews.php'; });
+$router->get('/admin/profile', function() { require_once BASE_PATH . '/admin/profile.php'; });
+$router->post('/admin/profile', function() { require_once BASE_PATH . '/admin/profile.php'; });
 $router->get('/admin/logout', function() { require_once BASE_PATH . '/admin/logout.php'; });

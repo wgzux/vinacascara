@@ -35,7 +35,7 @@ define('SITE_TAGLINE', 'Trà từ vỏ cà phê Arabica Việt Nam');
 // Google OAuth (Requires https on production)
 define('GOOGLE_CLIENT_ID', $_ENV['GOOGLE_CLIENT_ID'] ?? '');
 define('GOOGLE_CLIENT_SECRET', $_ENV['GOOGLE_CLIENT_SECRET'] ?? '');
-define('GOOGLE_REDIRECT_URI', SITE_URL . '/auth/google/callback');
+define('GOOGLE_REDIRECT_URI', SITE_URL . '/auth-callback');
 
 // VNPay Configuration (Sandbox by default)
 define('VNPAY_TMN_CODE', $_ENV['VNPAY_TMN_CODE'] ?? 'TESTCODE');

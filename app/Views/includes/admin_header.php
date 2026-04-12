@@ -50,6 +50,10 @@ $adminPageTitle = $adminPageTitle ?? 'Dashboard';
         <?= adminIcon('external-link') ?>
         <span>Xem website</span>
       </a>
+      <a href="/admin/profile" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Đổi mật khẩu</span>
+      </a>
       <a href="/admin/logout" class="nav-item nav-item-danger">
         <?= adminIcon('log-out') ?>
         <span>Đăng xuất</span>
